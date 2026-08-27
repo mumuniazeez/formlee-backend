@@ -17,7 +17,7 @@ export class AuthService {
     private readonly config: ConfigService,
   ) {}
 
-  async signup(signupDto: SignupDto) {
+  async signup(signupDto: SignupDto): Promise<LoginResponseDto> {
     const { firstName, lastName, email, password } = signupDto;
 
     const existingUser = await this.prisma.user.findFirst({
@@ -68,6 +68,10 @@ export class AuthService {
       expiresIn: '10days',
     });
 
-    return { user, access_token: token, message: "Yay, You're in" };
+    return {
+      user: { id: user.id, email: user.email },
+      access_token: token,
+      message: "Yay, You're in",
+    };
   }
 }
