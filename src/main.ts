@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ErrorMessageResponseDto } from './dto';
 import 'dotenv/config';
 
 declare const module: any;
@@ -30,6 +31,8 @@ async function bootstrap() {
     .setVersion('1.0')
     .addServer(process.env.APP_URL!)
     .addBearerAuth()
+    .addGlobalResponse({ status: '4XX', type: ErrorMessageResponseDto })
+    .addGlobalResponse({ status: '5XX', type: ErrorMessageResponseDto })
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
