@@ -12,18 +12,65 @@ datasource db {
   provider = "postgresql"
 }
 
-
 model User {
   id String @id @default(uuid())
 
   firstName String
-  lastName String
+  lastName  String
 
   email String @unique
 
   passwordHash String
 
+  forms Form[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Form {
+  id String @id @default(uuid())
+
+  slug              String     @unique
+  name              String
+  description       String?
+  status            FormStatus @default(active)
+  targetEmail       String
+  emailNotification Boolean    @default(true)
+  redirectLink      String?
+
+  user        User         @relation(fields: [userId], references: [id])
+  userId      String
+  submissions Submission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("forms")
+}
+
+model Submission {
+  id String @id @default(uuid())
+
+  email   String?
+  country String
+  ip      String
+
+  payload Json
+
+  form   Form   @relation(fields: [formId], references: [id])
+  formId String
+
+  submittedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("submissions")
+}
+
+enum FormStatus {
+  active
+  paused
+  archived
 }
