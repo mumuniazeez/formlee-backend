@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  ParseEnumPipe,
 } from '@nestjs/common';
 import { FormService } from './form.service';
 import { CreateFormDto, FormResponseDto, UpdateFormDto } from './dto/';
@@ -56,7 +57,8 @@ export class FormController {
   @Get('/status/:status')
   findAllByStatus(
     @GetUser('id') userId: string,
-    @Param('status') status: $Enums.FormStatus,
+    @Param('status', new ParseEnumPipe($Enums.FormStatus))
+    status: $Enums.FormStatus,
   ) {
     return this.formService.findAllByStatus(userId, status);
   }
