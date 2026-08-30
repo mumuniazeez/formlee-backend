@@ -69,8 +69,8 @@ export class FormController {
   })
   @ApiResponse({ status: 200, type: FormResponseDto })
   @Get(':idOrSlug')
-  findOne(@Param('idOrSlug') id: string, @GetUser('id') userId: string) {
-    return this.formService.findOne(id, userId);
+  findOne(@Param('idOrSlug') idOrSlug: string, @GetUser('id') userId: string) {
+    return this.formService.findOne(idOrSlug, userId);
   }
 
   @ApiOperation({
@@ -81,11 +81,11 @@ export class FormController {
   @ApiResponse({ status: 200, type: FormResponseDto })
   @Patch(':idOrSlug')
   update(
-    @Param('idOrSlug') id: string,
+    @Param('idOrSlug') idOrslug: string,
     @Body() updateFormDto: UpdateFormDto,
     @GetUser('id') userId: string,
   ) {
-    return this.formService.update(id, updateFormDto, userId);
+    return this.formService.update(idOrslug, updateFormDto, userId);
   }
 
   @ApiOperation({
@@ -94,7 +94,7 @@ export class FormController {
   })
   @ApiResponse({ status: 200, type: GeneralOkResponseDto })
   @Delete(':idOrSlug')
-  remove(@Param('idOrSlug') id: string, @GetUser('id') userId: string) {
-    return this.formService.remove(id, userId);
+  remove(@Param('idOrSlug') idOrSlug: string, @GetUser('id') userId: string) {
+    return this.formService.remove(idOrSlug, userId);
   }
 }
