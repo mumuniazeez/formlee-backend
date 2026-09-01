@@ -8,6 +8,7 @@ export class SubmissionService {
   constructor(private readonly prisma: PrismaService) {}
 
   create(createSubmissionDto: JSON) {
+    console.log(createSubmissionDto);
     return 'This action adds a new submission';
   }
 
