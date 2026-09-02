@@ -6,20 +6,32 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { SubmissionService } from './submission.service';
 import { SubmissionResponseDto } from './dto';
 import { JwtGuard } from '../auth/guard';
-import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { GetUser } from '../auth/decorators/get-user.decorators';
+import { type Request } from 'express';
 
 @Controller('submission')
 export class SubmissionController {
   constructor(private readonly submissionService: SubmissionService) {}
 
+  @ApiBody({ type: class Body {} })
   @Post('/f/:formSlug')
-  create(@Body() createSubmissionDto: JSON) {
-    return this.submissionService.create(createSubmissionDto);
+  create(
+    @Body() createSubmissionDto: JSON,
+    @Param('formSlug') formSlug: string,
+    @Req() req: Request,
+  ) {
+    return this.submissionService.create(createSubmissionDto, formSlug, req);
   }
 
   @ApiOperation({

@@ -8,6 +8,7 @@ class SubmissionFormDto extends PickType(FormResponseDto, [
   'id',
   'slug',
   'description',
+  'redirectLink',
 ]) {}
 export class SubmissionResponseDto implements Submission {
   @ApiProperty({ description: 'Id of the submission' })
@@ -22,23 +23,19 @@ export class SubmissionResponseDto implements Submission {
   @ApiProperty({
     description: 'Country of the user that submitted the form',
     type: 'string',
-    nullable: true,
   })
   country!: string;
   @ApiProperty({
     description: 'IP address of the user that submitted the form',
     type: 'string',
-    nullable: true,
   })
-  ip!: string;
+  ipAddress!: string;
   @ApiProperty({
     description: 'JSON payload of the form data',
-    nullable: true,
   })
-  payload!: JsonValue;
+  data!: JsonValue;
   @ApiProperty({
     description: 'Id of the form this submission is under',
-    nullable: true,
   })
   formId!: string;
 
@@ -49,13 +46,16 @@ export class SubmissionResponseDto implements Submission {
   form!: SubmissionFormDto;
 
   @ApiProperty({
+    description: 'Browser user-agent of the submitter',
+  })
+  userAgent!: string;
+  @ApiProperty({
+    description: 'If submission as been read',
+  })
+  read!: boolean;
+
+  @ApiProperty({
     description: 'The time this submission was made',
-    nullable: true,
   })
   submittedAt!: Date;
-  @ApiProperty({
-    description: 'The last time this submission was updated',
-    nullable: true,
-  })
-  updatedAt!: Date;
 }

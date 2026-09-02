@@ -15,6 +15,7 @@ import { MailerModule } from './mailer/mailer.module';
 
     // Service modules
     PrismaModule,
+    MailerModule,
 
     // Routes modules
     HealthModule,
@@ -22,7 +23,6 @@ import { MailerModule } from './mailer/mailer.module';
     UserModule,
     FormModule,
     SubmissionModule,
-    MailerModule,
   ],
 })
 export class AppModule {}

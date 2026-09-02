@@ -8,6 +8,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { hash, verify } from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { MailerService } from '../mailer/mailer.service';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +16,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
+    private readonly mailer: MailerService,
   ) {}
 
   async signup(signupDto: SignupDto): Promise<LoginResponseDto> {
@@ -38,6 +40,12 @@ export class AuthService {
         email,
         passwordHash,
       },
+    });
+
+    await this.mailer.contacts.create({
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
     });
 
     return this.login({ email: user.email, password });
