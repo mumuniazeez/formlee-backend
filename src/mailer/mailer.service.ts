@@ -9,9 +9,9 @@ export class MailerService extends Resend {
   }
 
   async sendEmail({
+    subject,
     to,
     html,
-    subject,
     from,
   }: {
     to: string;
@@ -19,10 +19,29 @@ export class MailerService extends Resend {
     html: string;
     from?: string;
   }) {
-    try {
-      await this.emails.send({ to, from: from || 'ss', html, subject });
-    } catch (error: any) {
-      throw new Error(error);
+    let attempts = 0;
+    const maxAttempts = 3;
+
+    while (attempts < maxAttempts) {
+      try {
+        const { error } = await this.emails.send({
+          from: from || this.config.get('RESEND_FROM_EMAIL')!,
+          to,
+          subject,
+          html,
+        });
+
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        return { success: true };
+      } catch (error) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          throw error;
+        }
+      }
     }
   }
 }

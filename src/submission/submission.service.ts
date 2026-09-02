@@ -1,12 +1,25 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { SubmissionResponseDto } from './dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { GeneralOkResponseDto } from '../dto';
 import { type Request } from 'express';
+import { MailerService } from '../mailer/mailer.service';
+import handlebars from 'handlebars';
+import { readFileSync } from 'fs';
+import path from 'path';
+import { FieldFormatterService } from './field-formatter.service';
 
 @Injectable()
 export class SubmissionService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly mailerService: MailerService,
+    private readonly fieldFormatterService: FieldFormatterService,
+  ) {}
 
   async create(
     data: any,
@@ -15,7 +28,7 @@ export class SubmissionService {
   ): Promise<SubmissionResponseDto> {
     const form = await this.prisma.form.findUnique({
       where: { slug: formSlug },
-      select: { id: true, status: true },
+      select: { id: true, status: true, targetEmail: true },
     });
 
     if (!form) throw new NotFoundException('Form not found');
@@ -27,30 +40,53 @@ export class SubmissionService {
     const userAgent = req.headers['user-agent']!;
 
     console.log({ email, ipAddress, userAgent });
-
-    const submission = await this.prisma.submission.create({
-      data: {
-        userAgent,
-        email,
-        country: 'Nigeria',
-        data,
-        ipAddress,
-        formId: form.id,
-      },
-      include: {
-        form: {
-          select: {
-            id: true,
-            slug: true,
-            name: true,
-            description: true,
-            redirectLink: true,
+    const filePath = path.join('emails', `submission.hbs`);
+    try {
+      const submission = await this.prisma.submission.create({
+        data: {
+          userAgent,
+          email,
+          country: 'Nigeria',
+          data,
+          ipAddress,
+          formId: form.id,
+        },
+        include: {
+          form: {
+            select: {
+              id: true,
+              slug: true,
+              name: true,
+              description: true,
+              redirectLink: true,
+            },
           },
         },
-      },
-    });
+      });
+      await this.mailerService.sendEmail({
+        to: form.targetEmail,
+        subject: `New submission for form [${formSlug}] | Formlee`,
+        html: handlebars.compile(readFileSync(filePath, 'utf-8'))({
+          formName: submission.form.name,
+          submittedAt: new Date(submission.submittedAt).toLocaleString(),
+          fields: this.fieldFormatterService.format(
+            submission.data as Record<string, unknown>,
+          ),
+          ipAddress,
+          referer: 'yourclientsite.com',
+          dashboardUrl:
+            'https://formlee.app/dashboard/forms/abc123/submissions/xyz',
+          manageNotificationsUrl:
+            'https://formlee.app/dashboard/forms/abc123/settings',
+        }),
+      });
 
-    return submission;
+      return submission;
+    } catch (error: any) {
+      throw new InternalServerErrorException(
+        'Error sending email: ' + error.message,
+      );
+    }
   }
 
   async findAll(

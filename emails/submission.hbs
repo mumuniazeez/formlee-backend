@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>New Form Submission</title>
+<!--[if mso]>
+<noscript>
+<xml>
+<o:OfficeDocumentSettings>
+<o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
+</xml>
+</noscript>
+<![endif]-->
+<style>
+  body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+  table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+  img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+  body { margin: 0; padding: 0; width: 100% !important; height: 100% !important; background-color: #f4f5f7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
+  @media screen and (max-width: 600px) {
+    .email-container { width: 100% !important; }
+    .mobile-padding { padding-left: 20px !important; padding-right: 20px !important; }
+    .stack-column { display: block !important; width: 100% !important; }
+  }
+</style>
+</head>
+<body style="margin:0; padding:0; background-color:#f4f5f7;">
+
+  <!-- Preheader (hidden preview text) -->
+  <div style="display:none; max-height:0; overflow:hidden; mso-hide:all;">
+    New submission on {{formName}} &mdash; {{fieldCount}} field(s) submitted just now.
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f5f7;">
+    <tr>
+      <td align="center" style="padding: 32px 16px;">
+
+        <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px; background-color:#ffffff; border-radius:12px; overflow:hidden; border:1px solid #e5e7eb;">
+
+          <!-- Header -->
+          <tr>
+            <td class="mobile-padding" style="background-color:#111827; padding:28px 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="font-size:18px; font-weight:700; color:#ffffff; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    Formlee
+                  </td>
+                  <td align="right" style="font-size:12px; color:#9ca3af; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    New submission
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Title block -->
+          <tr>
+            <td class="mobile-padding" style="padding:32px 32px 8px 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="width:40px; vertical-align:top;">
+                    <table role="presentation" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td width="32" height="32" align="center" valign="middle" style="background-color:#ecfdf5; border-radius:8px; font-size:16px;">
+                          &#9993;
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td style="vertical-align:top; padding-left:8px;">
+                    <p style="margin:0; font-size:20px; line-height:28px; font-weight:700; color:#111827; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                      You've got a new submission
+                    </p>
+                    <p style="margin:4px 0 0 0; font-size:14px; line-height:20px; color:#6b7280; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                      on <strong style="color:#374151;">{{formName}}</strong> &middot; {{submittedAt}}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Submission data card -->
+          <tr>
+            <td class="mobile-padding" style="padding:16px 32px 8px 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f9fafb; border:1px solid #e5e7eb; border-radius:10px;">
+                <tr>
+                  <td style="padding:20px 24px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+
+                      {{#each fields}}
+                      <tr>
+                        <td colspan="2" style="padding: {{#unless @first}}14px{{else}}0{{/unless}} 0 6px 0; border-top: {{#unless @first}}1px solid #e5e7eb{{else}}none{{/unless}};">
+                          <p style="margin:{{#unless @first}}14px 0 0 0{{else}}0{{/unless}}; font-size:11px; letter-spacing:0.04em; text-transform:uppercase; color:#9ca3af; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                            {{this.label}}
+                          </p>
+                          <p style="margin:4px 0 0 0; font-size:14px; line-height:22px; color:#111827; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; word-break:break-word;">
+                            {{this.value}}
+                          </p>
+                        </td>
+                      </tr>
+                      {{/each}}
+
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Metadata row -->
+          <tr>
+            <td class="mobile-padding" style="padding:8px 32px 0 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="font-size:12px; color:#9ca3af; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; padding:6px 0;">
+                    IP address
+                  </td>
+                  <td align="right" style="font-size:12px; color:#6b7280; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; padding:6px 0;">
+                    {{ipAddress}}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-size:12px; color:#9ca3af; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; padding:6px 0; border-top:1px solid #f3f4f6;">
+                    Source
+                  </td>
+                  <td align="right" style="font-size:12px; color:#6b7280; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; padding:6px 0; border-top:1px solid #f3f4f6;">
+                    {{referer}}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- CTA button -->
+          <tr>
+            <td class="mobile-padding" align="center" style="padding:28px 32px 8px 32px;">
+              <table role="presentation" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" style="border-radius:8px; background-color:#111827;">
+                    <a href="{{dashboardUrl}}" target="_blank" style="display:inline-block; padding:12px 28px; font-size:14px; font-weight:600; color:#ffffff; text-decoration:none; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; border-radius:8px;">
+                      View submission &rarr;
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td class="mobile-padding" style="padding:28px 32px 32px 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #e5e7eb;">
+                <tr>
+                  <td style="padding-top:20px; font-size:12px; line-height:18px; color:#9ca3af; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    You're receiving this because notifications are enabled for <strong style="color:#6b7280;">{{formName}}</strong>.
+                    <a href="{{manageNotificationsUrl}}" style="color:#6b7280; text-decoration:underline;">Manage notification settings</a>.
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+
+        <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px;">
+          <tr>
+            <td align="center" style="padding:20px 0; font-size:12px; color:#9ca3af; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+              Sent by Formlee &middot; <a href="{{dashboardUrl}}" style="color:#9ca3af;">formlee.xyz</a>
+            </td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
