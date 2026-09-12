@@ -34,6 +34,20 @@ export class SubmissionResponseDto implements Submission {
     description: 'JSON payload of the form data',
   })
   data!: JsonValue;
+
+  @ApiProperty({
+    description: 'URL where the form was submitted on, if available',
+  })
+  referer!: string;
+  @ApiProperty({
+    description: 'Browser user-agent of the submitter',
+  })
+  userAgent!: string;
+  @ApiProperty({
+    description: 'If submission as been read',
+  })
+  read!: boolean;
+
   @ApiProperty({
     description: 'Id of the form this submission is under',
   })
@@ -44,15 +58,6 @@ export class SubmissionResponseDto implements Submission {
     type: SubmissionFormDto,
   })
   form!: SubmissionFormDto;
-
-  @ApiProperty({
-    description: 'Browser user-agent of the submitter',
-  })
-  userAgent!: string;
-  @ApiProperty({
-    description: 'If submission as been read',
-  })
-  read!: boolean;
 
   @ApiProperty({
     description: 'The time this submission was made',

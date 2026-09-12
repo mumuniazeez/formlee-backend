@@ -58,6 +58,7 @@ model Submission {
   country   String
   userAgent String
   ipAddress String
+  referrer   String  @default("N/A")
 
   read Boolean @default(false)
 

@@ -41,6 +41,7 @@ export class SubmissionService {
 
     console.log({ email, ipAddress, userAgent });
     const filePath = path.join('emails', `submission.hbs`);
+
     try {
       const submission = await this.prisma.submission.create({
         data: {
@@ -50,6 +51,7 @@ export class SubmissionService {
           data,
           ipAddress,
           formId: form.id,
+          referer: req.headers.referer,
         },
         include: {
           form: {
@@ -63,6 +65,7 @@ export class SubmissionService {
           },
         },
       });
+
       await this.mailerService.sendEmail({
         to: form.targetEmail,
         subject: `New submission for form [${formSlug}] | Formlee`,
@@ -73,7 +76,7 @@ export class SubmissionService {
             submission.data as Record<string, unknown>,
           ),
           ipAddress,
-          referer: 'yourclientsite.com',
+          referer: submission.referer,
           dashboardUrl:
             'https://formlee.app/dashboard/forms/abc123/submissions/xyz',
           manageNotificationsUrl:
