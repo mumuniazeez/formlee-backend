@@ -12,6 +12,7 @@ import handlebars from 'handlebars';
 import { readFileSync } from 'fs';
 import path from 'path';
 import { FieldFormatterService } from './field-formatter.service';
+import axios from 'axios';
 
 @Injectable()
 export class SubmissionService {
@@ -39,33 +40,37 @@ export class SubmissionService {
     const ipAddress = req.ip!;
     const userAgent = req.headers['user-agent']!;
 
-    console.log({ email, ipAddress, userAgent });
     const filePath = path.join('emails', `submission.hbs`);
 
-    try {
-      const submission = await this.prisma.submission.create({
-        data: {
-          userAgent,
-          email,
-          country: 'Nigeria',
-          data,
-          ipAddress,
-          formId: form.id,
-          referer: req.headers.referer,
-        },
-        include: {
-          form: {
-            select: {
-              id: true,
-              slug: true,
-              name: true,
-              description: true,
-              redirectLink: true,
-            },
+    const response = await axios.get<{
+      country: string;
+      city: string;
+      region: string;
+    }>(`https://ipwho.is/${ipAddress}`);
+
+    const submission = await this.prisma.submission.create({
+      data: {
+        userAgent,
+        email,
+        country: `${response.data.city}, ${response.data.region}, ${response.data.country}`,
+        data,
+        ipAddress,
+        formId: form.id,
+        referer: req.headers.referer,
+      },
+      include: {
+        form: {
+          select: {
+            id: true,
+            slug: true,
+            name: true,
+            description: true,
+            redirectLink: true,
           },
         },
-      });
-
+      },
+    });
+    try {
       await this.mailerService.sendEmail({
         to: form.targetEmail,
         subject: `New submission for form [${formSlug}] | Formlee`,
@@ -85,9 +90,10 @@ export class SubmissionService {
       });
 
       return submission;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: any) {
       throw new InternalServerErrorException(
-        'Error sending email: ' + error.message,
+        'Submission Recorded, failed to send email notification',
       );
     }
   }

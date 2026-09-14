@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { FormModule } from './form/form.module';
 import { SubmissionModule } from './submission/submission.module';
 import { MailerModule } from './mailer/mailer.module';
+import { StatsModule } from './stats/stats.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { MailerModule } from './mailer/mailer.module';
     UserModule,
     FormModule,
     SubmissionModule,
+    StatsModule,
   ],
 })
 export class AppModule {}
