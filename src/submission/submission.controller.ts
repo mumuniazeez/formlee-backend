@@ -7,6 +7,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Patch,
 } from '@nestjs/common';
 import { SubmissionService } from './submission.service';
 import { SubmissionResponseDto } from './dto';
@@ -56,9 +57,33 @@ export class SubmissionController {
   @ApiResponse({ type: [SubmissionResponseDto], status: 200 })
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
+  @Get('recent')
+  findRecent(@GetUser('id') userId: string) {
+    return this.submissionService.findRecent(userId);
+  }
+
+  @ApiOperation({
+    summary: 'Find a submission',
+    description: 'Find a submission by id',
+  })
+  @ApiResponse({ type: [SubmissionResponseDto], status: 200 })
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
   @Get(':id')
   findOne(@Param('id') id: string, @GetUser('id') userId: string) {
     return this.submissionService.findOne(id, userId);
+  }
+
+  @ApiOperation({
+    summary: 'Find a submission',
+    description: 'Find a submission by id',
+  })
+  @ApiResponse({ type: [SubmissionResponseDto], status: 200 })
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
+  @Patch(':id/read')
+  markAsRead(@Param('id') id: string, @GetUser('id') userId: string) {
+    return this.submissionService.markAsRead(id, userId);
   }
 
   @ApiOperation({

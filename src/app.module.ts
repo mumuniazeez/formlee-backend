@@ -8,6 +8,7 @@ import { FormModule } from './form/form.module';
 import { SubmissionModule } from './submission/submission.module';
 import { MailerModule } from './mailer/mailer.module';
 import { StatsModule } from './stats/stats.module';
+import { PolarModule } from './polar/polar.module';
 
 @Module({
   imports: [
@@ -22,9 +23,10 @@ import { StatsModule } from './stats/stats.module';
     HealthModule,
     AuthModule,
     UserModule,
+    StatsModule,
     FormModule,
     SubmissionModule,
-    StatsModule,
+    PolarModule,
   ],
 })
 export class AppModule {}

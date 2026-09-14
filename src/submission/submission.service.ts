@@ -98,6 +98,34 @@ export class SubmissionService {
     }
   }
 
+  async findRecent(userId: string): Promise<SubmissionResponseDto[]> {
+    const submissions = await this.prisma.submission.findMany({
+      where: {
+        form: { userId },
+      },
+      orderBy: {
+        submittedAt: 'desc',
+      },
+      take: 5,
+      include: {
+        form: {
+          select: {
+            name: true,
+            id: true,
+            slug: true,
+            description: true,
+            redirectLink: true,
+          },
+        },
+      },
+    });
+
+    if (submissions.length === 0)
+      throw new NotFoundException('No submissions yet');
+
+    return submissions;
+  }
+
   async findAll(
     formIdOrSlug: string,
     userId: string,
@@ -149,6 +177,31 @@ export class SubmissionService {
     if (!submission) throw new NotFoundException('Submission not found');
 
     return submission;
+  }
+
+  async markAsRead(id: string, userId: string): Promise<SubmissionResponseDto> {
+    const submission = await this.prisma.submission.findFirst({
+      where: { id, form: { userId } },
+      select: { id: true },
+    });
+
+    if (!submission) throw new NotFoundException('Submission not found');
+
+    return this.prisma.submission.update({
+      where: { id: submission.id },
+      data: { read: true },
+      include: {
+        form: {
+          select: {
+            name: true,
+            id: true,
+            slug: true,
+            description: true,
+            redirectLink: true,
+          },
+        },
+      },
+    });
   }
 
   async remove(id: string, userId: string): Promise<GeneralOkResponseDto> {

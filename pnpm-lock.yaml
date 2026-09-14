@@ -38,6 +38,9 @@ importers:
       '@nestjs/throttler':
         specifier: ^6.5.0
         version: 6.5.0(@nestjs/common@11.2.3(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@11.2.3)(reflect-metadata@0.2.2)
+      '@polar-sh/sdk':
+        specifier: 1.0.0-alpha.21
+        version: 1.0.0-alpha.21
       '@prisma/adapter-pg':
         specifier: ^7.10.0
         version: 7.10.0
@@ -973,6 +976,10 @@ packages:
   '@pkgr/core@0.3.6':
     resolution: {integrity: sha512-SEeaJLb3qBNF/OaXnaR1NmmBbFYk1zC0ZH/52fATcRPLFg/p791YrcyFFy44Bo9sLaGuSuLp5Q6axbb/O+v/RA==}
     engines: {node: ^14.18.0 || >=16.0.0}
+
+  '@polar-sh/sdk@1.0.0-alpha.21':
+    resolution: {integrity: sha512-sWRprsIjIw5d5J6bl28U2iLfdu/6050isEWhvWTBamKzCdkjwKvhHseYEjnzpepqYkd1HcUo1MZJvbqEt0Lf5w==}
+    engines: {node: '>=22'}
 
   '@prisma/adapter-pg@7.10.0':
     resolution: {integrity: sha512-N7nwSor0HO1Kz6xBv0TPAjAPysKK0fac6p4fVN3ensLOuzc/83Fgmln5k92eK/cvzqdkSR/2kkAqlbcdwVrwpw==}
@@ -5161,6 +5168,8 @@ snapshots:
     optional: true
 
   '@pkgr/core@0.3.6': {}
+
+  '@polar-sh/sdk@1.0.0-alpha.21': {}
 
   '@prisma/adapter-pg@7.10.0':
     dependencies:
