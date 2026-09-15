@@ -11,6 +11,7 @@ import { StatsModule } from './stats/stats.module';
 import { PaymentModule } from './payment/payment.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { APP_GUARD } from '@nestjs/core';
     FormModule,
     SubmissionModule,
     PaymentModule,
+    NotificationModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

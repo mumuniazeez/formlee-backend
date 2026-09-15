@@ -102,15 +102,16 @@ export class AuthService {
 
   // TODO: Implement password reset
 
-  // TODO: Implement change password
-
   async changePassword(
     changePasswordDto: ChangePasswordDto,
     userId: string,
   ): Promise<GeneralOkResponseDto> {
     const { oldPassword, newPassword } = changePasswordDto;
 
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, passwordHash: true },
+    });
     if (!user) throw new NotFoundException('User not found');
 
     const isPasswordValid = await verify(user.passwordHash, oldPassword);
