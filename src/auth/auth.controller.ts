@@ -1,8 +1,23 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, LoginResponseDto, SignupDto } from './dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ChangePasswordDto,
+  LoginDto,
+  LoginResponseDto,
+  SignupDto,
+} from './dto';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
+import { GetUser } from './decorators/get-user.decorators';
+import { GeneralOkResponseDto } from '../dto';
+import { JwtGuard } from './guard';
 
 @Controller('auth')
 export class AuthController {
@@ -29,5 +44,22 @@ export class AuthController {
   @Post('login')
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
+  }
+
+  @ApiOperation({
+    summary: 'Change a user account password',
+    description: 'Change a user account password',
+  })
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ type: GeneralOkResponseDto, status: 200 })
+  @ApiBearerAuth()
+  @Throttle({ default: { ttl: 300000, limit: 3, blockDuration: 900000 } })
+  @UseGuards(JwtGuard)
+  @Post('recovery/change-password')
+  changePassword(
+    @Body() changePasswordDto: ChangePasswordDto,
+    @GetUser('id') userId: string,
+  ) {
+    return this.authService.changePassword(changePasswordDto, userId);
   }
 }

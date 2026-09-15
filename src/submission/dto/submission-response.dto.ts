@@ -38,7 +38,7 @@ export class SubmissionResponseDto implements Submission {
   @ApiProperty({
     description: 'URL where the form was submitted on, if available',
   })
-  referer!: string;
+  referrer!: string;
   @ApiProperty({
     description: 'Browser user-agent of the submitter',
   })

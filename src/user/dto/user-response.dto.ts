@@ -4,6 +4,8 @@ import { User } from '../../../generated/prisma';
 export class UserResponseDto implements Omit<User, 'passwordHash'> {
   @ApiProperty({ description: 'The id of the user' })
   id!: string;
+  @ApiProperty({ description: 'The id of the user on polar.sh' })
+  polar_customer_id!: string | null;
   @ApiProperty({ description: 'The first name of the user' })
   firstName!: string;
   @ApiProperty({ description: 'The last name of the user' })

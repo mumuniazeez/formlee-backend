@@ -81,7 +81,7 @@ export class SubmissionService {
             submission.data as Record<string, unknown>,
           ),
           ipAddress,
-          referer: submission.referer,
+          referer: submission.referrer,
           dashboardUrl:
             'https://formlee.app/dashboard/forms/abc123/submissions/xyz',
           manageNotificationsUrl:

@@ -1,15 +1,22 @@
 import {
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { LoginDto, LoginResponseDto, SignupDto } from './dto';
+import {
+  ChangePasswordDto,
+  LoginDto,
+  LoginResponseDto,
+  SignupDto,
+} from './dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { hash, verify } from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { MailerService } from '../mailer/mailer.service';
 import { PaymentService } from '../payment/payment.service';
+import { GeneralOkResponseDto } from '../dto';
 
 @Injectable()
 export class AuthService {
@@ -42,6 +49,14 @@ export class AuthService {
         email,
         passwordHash,
       },
+    });
+
+    const polarCustomer =
+      await this.paymentService.registerCustomerOnPolar(user);
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { polar_customer_id: polarCustomer.id },
     });
 
     await this.mailer.contacts.create({
@@ -89,7 +104,29 @@ export class AuthService {
 
   // TODO: Implement change password
 
-  async changePasswork() {}
+  async changePassword(
+    changePasswordDto: ChangePasswordDto,
+    userId: string,
+  ): Promise<GeneralOkResponseDto> {
+    const { oldPassword, newPassword } = changePasswordDto;
+
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new NotFoundException('User not found');
+
+    const isPasswordValid = await verify(user.passwordHash, oldPassword);
+
+    if (!isPasswordValid)
+      throw new UnauthorizedException('Invalid Old Password');
+
+    const newPasswordHash = await hash(newPassword);
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { passwordHash: newPasswordHash },
+    });
+
+    return { message: 'Password Changed Successfully' };
+  }
 
   // TODO: Implement change password
 }
