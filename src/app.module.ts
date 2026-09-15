@@ -8,12 +8,18 @@ import { FormModule } from './form/form.module';
 import { SubmissionModule } from './submission/submission.module';
 import { MailerModule } from './mailer/mailer.module';
 import { StatsModule } from './stats/stats.module';
-import { PolarModule } from './polar/polar.module';
+import { PaymentModule } from './payment/payment.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
     // Nestjs builtin modules
     ConfigModule.forRoot({ isGlobal: true }),
+    ThrottlerModule.forRoot({
+      throttlers: [{ ttl: 60000, limit: 120, blockDuration: 120000 }],
+      errorMessage: 'Too many request from your device, try again later',
+    }),
 
     // Service modules
     PrismaModule,
@@ -26,7 +32,8 @@ import { PolarModule } from './polar/polar.module';
     StatsModule,
     FormModule,
     SubmissionModule,
-    PolarModule,
+    PaymentModule,
   ],
+  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}

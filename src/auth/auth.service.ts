@@ -9,6 +9,7 @@ import { hash, verify } from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { MailerService } from '../mailer/mailer.service';
+import { PaymentService } from '../payment/payment.service';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,7 @@ export class AuthService {
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
     private readonly mailer: MailerService,
+    private readonly paymentService: PaymentService,
   ) {}
 
   async signup(signupDto: SignupDto): Promise<LoginResponseDto> {
@@ -82,4 +84,12 @@ export class AuthService {
       message: "Yay, You're in",
     };
   }
+
+  // TODO: Implement password reset
+
+  // TODO: Implement change password
+
+  async changePasswork() {}
+
+  // TODO: Implement change password
 }
