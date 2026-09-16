@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import 'dotenv/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
@@ -10,8 +12,7 @@ import { MailerModule } from './mailer/mailer.module';
 import { StatsModule } from './stats/stats.module';
 import { PaymentModule } from './payment/payment.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
-import { NotificationModule } from './notification/notification.module';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
@@ -20,6 +21,12 @@ import { NotificationModule } from './notification/notification.module';
     ThrottlerModule.forRoot({
       throttlers: [{ ttl: 60000, limit: 120, blockDuration: 120000 }],
       errorMessage: 'Too many request from your device, try again later',
+    }),
+    BullModule.forRoot({
+      connection: {
+        host: process.env.REDIS_HOST ?? 'localhost',
+        port: Number(process.env.REDIS_PORT ?? 6379),
+      },
     }),
 
     // Service modules
@@ -34,7 +41,6 @@ import { NotificationModule } from './notification/notification.module';
     FormModule,
     SubmissionModule,
     PaymentModule,
-    NotificationModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

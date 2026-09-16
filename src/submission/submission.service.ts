@@ -1,25 +1,16 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { SubmissionResponseDto } from './dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { GeneralOkResponseDto } from '../dto';
 import { type Request } from 'express';
-import { MailerService } from '../mailer/mailer.service';
-import handlebars from 'handlebars';
-import { readFileSync } from 'fs';
-import path from 'path';
-import { FieldFormatterService } from './field-formatter.service';
 import axios from 'axios';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class SubmissionService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly mailerService: MailerService,
-    private readonly fieldFormatterService: FieldFormatterService,
+    private readonly notificationService: NotificationService,
   ) {}
 
   async create(
@@ -39,8 +30,6 @@ export class SubmissionService {
     const email: string = data.email;
     const ipAddress = req.ip!;
     const userAgent = req.headers['user-agent']!;
-
-    const filePath = path.join('emails', `submission.hbs`);
 
     const response = await axios.get<{
       country: string;
@@ -70,32 +59,13 @@ export class SubmissionService {
         },
       },
     });
-    try {
-      await this.mailerService.sendEmail({
-        to: form.targetEmail,
-        subject: `New submission for form [${formSlug}] | Formlee`,
-        html: handlebars.compile(readFileSync(filePath, 'utf-8'))({
-          formName: submission.form.name,
-          submittedAt: new Date(submission.submittedAt).toLocaleString(),
-          fields: this.fieldFormatterService.format(
-            submission.data as Record<string, unknown>,
-          ),
-          ipAddress,
-          referer: submission.referrer,
-          dashboardUrl:
-            'https://formlee.app/dashboard/forms/abc123/submissions/xyz',
-          manageNotificationsUrl:
-            'https://formlee.app/dashboard/forms/abc123/settings',
-        }),
-      });
 
-      return submission;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error: any) {
-      throw new InternalServerErrorException(
-        'Submission Recorded, failed to send email notification',
-      );
-    }
+    await this.notificationService.notifyNewSubmission({
+      submissionId: submission.id,
+      formId: form.id,
+    });
+
+    return submission;
   }
 
   async findRecent(userId: string): Promise<SubmissionResponseDto[]> {

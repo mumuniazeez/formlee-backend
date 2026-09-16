@@ -8,6 +8,12 @@ services:
     ports:
       - '5123:5432'
 
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
   # adminer:
   #   image: adminer
   #   restart: always

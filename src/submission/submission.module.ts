@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { SubmissionService } from './submission.service';
 import { SubmissionController } from './submission.controller';
-import { FieldFormatterService } from './field-formatter.service';
+import { NotificationModule } from '../notification/notification.module';
 
 @Module({
+  imports: [NotificationModule],
   controllers: [SubmissionController],
-  providers: [SubmissionService, FieldFormatterService],
+  providers: [SubmissionService],
 })
 export class SubmissionModule {}
