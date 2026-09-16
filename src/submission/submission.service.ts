@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { SubmissionResponseDto } from './dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { GeneralOkResponseDto } from '../dto';
+import { GeneralOkResponseDto } from '../common/dto';
 import { type Request } from 'express';
 import axios from 'axios';
 import { NotificationService } from '../notification/notification.service';

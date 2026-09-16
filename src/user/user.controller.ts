@@ -11,7 +11,7 @@ import { GetUser } from '../auth/decorators/get-user.decorators';
 import { UpdateUserDto, UserResponseDto } from './dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtGuard } from '../auth/guard';
-import { GeneralOkResponseDto } from '../dto';
+import { GeneralOkResponseDto } from '../common/dto';
 import { type User } from '../../generated/prisma';
 
 @ApiBearerAuth()

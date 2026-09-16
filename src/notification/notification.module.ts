@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { BullModule } from '@nestjs/bullmq';
 import { NotificationProcessor } from './notification.processor';
-import { FieldFormatterService } from '../submission/field-formatter.service';
+import { CommonModule } from '../common/common.module';
 
 export const NOTIFICATION_QUEUE = 'notification';
 
@@ -17,12 +17,9 @@ export const NOTIFICATION_QUEUE = 'notification';
         removeOnFail: 1000,
       },
     }),
+    CommonModule,
   ],
-  providers: [
-    NotificationService,
-    NotificationProcessor,
-    FieldFormatterService,
-  ],
+  providers: [NotificationService, NotificationProcessor],
   exports: [NotificationService],
 })
 export class NotificationModule {}

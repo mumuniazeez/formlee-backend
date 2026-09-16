@@ -16,7 +16,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { MailerService } from '../mailer/mailer.service';
 import { PaymentService } from '../payment/payment.service';
-import { GeneralOkResponseDto } from '../dto';
+import { GeneralOkResponseDto } from '../common/dto';
 
 @Injectable()
 export class AuthService {

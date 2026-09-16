@@ -20,7 +20,7 @@ import {
 import { JwtGuard } from '../auth/guard';
 import { GetUser } from '../auth/decorators/get-user.decorators';
 import { $Enums, type User } from '../../generated/prisma';
-import { GeneralOkResponseDto } from '../dto';
+import { GeneralOkResponseDto } from '../common/dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtGuard)

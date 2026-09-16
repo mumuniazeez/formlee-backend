@@ -1,6 +1,6 @@
 import { PrismaService } from '../prisma/prisma.service';
 import { MailerService } from '../mailer/mailer.service';
-import { FieldFormatterService } from '../submission/field-formatter.service';
+import { FieldFormatterService } from '../common/field-formatter.service';
 import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import { NOTIFICATION_QUEUE } from './notification.module';
 import { Logger } from '@nestjs/common';

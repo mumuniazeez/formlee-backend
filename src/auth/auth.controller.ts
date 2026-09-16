@@ -16,7 +16,7 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { GetUser } from './decorators/get-user.decorators';
-import { GeneralOkResponseDto } from '../dto';
+import { GeneralOkResponseDto } from '../common/dto';
 import { JwtGuard } from './guard';
 
 @Controller('auth')

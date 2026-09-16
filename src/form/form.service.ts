@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { randomBytes } from 'crypto';
 import { CreateFormDto, FormResponseDto, UpdateFormDto } from './dto/';
 import { PrismaService } from '../prisma/prisma.service';
-import { GeneralOkResponseDto } from '../dto';
+import { GeneralOkResponseDto } from '../common/dto';
 import { $Enums } from '../../generated/prisma';
 
 @Injectable()
