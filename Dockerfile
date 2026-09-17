@@ -2,12 +2,13 @@
 # BUILD FOR LOCAL DEVELOPMENT
 ###################
 
-FROM node:26 AS development
+FROM node:20-alpine AS development
 RUN npm install -g pnpm
 
 WORKDIR /usr/src/app
 
-COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+# If this is not a pnpm workspace, drop pnpm-workspace.yaml from this line.
+COPY --chown=node:node package.json pnpm-lock.yaml ./
 
 RUN pnpm fetch --prod
 
@@ -20,12 +21,12 @@ USER node
 # BUILD FOR PRODUCTION
 ###################
 
-FROM node:26 AS build
+FROM node:20-alpine AS build
 RUN npm install -g pnpm
 
 WORKDIR /usr/src/app
 
-COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY --chown=node:node package.json pnpm-lock.yaml ./
 
 COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
 
@@ -45,7 +46,14 @@ USER node
 
 FROM node:20-alpine AS production
 
+ENV NODE_ENV=production
+
+WORKDIR /usr/src/app
+
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+COPY --chown=node:node --from=build /usr/src/app/package.json ./package.json
+
+USER node
 
 CMD [ "node", "dist/main.js" ]
