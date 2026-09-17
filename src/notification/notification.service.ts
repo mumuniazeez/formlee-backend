@@ -1,7 +1,7 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
-import { NOTIFICATION_QUEUE } from './notification.module';
 import { Queue } from 'bullmq';
+import { NOTIFICATION_QUEUE } from './notification.constants';
 
 export interface NewSubmissionJsonData {
   submissionId: string;

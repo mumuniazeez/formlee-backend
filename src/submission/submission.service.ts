@@ -45,7 +45,7 @@ export class SubmissionService {
         data,
         ipAddress,
         formId: form.id,
-        referer: req.headers.referer,
+        referrer: req.headers.referer ?? 'N/A',
       },
       include: {
         form: {

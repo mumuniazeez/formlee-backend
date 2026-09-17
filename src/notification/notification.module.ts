@@ -3,8 +3,7 @@ import { NotificationService } from './notification.service';
 import { BullModule } from '@nestjs/bullmq';
 import { NotificationProcessor } from './notification.processor';
 import { CommonModule } from '../common/common.module';
-
-export const NOTIFICATION_QUEUE = 'notification';
+import { NOTIFICATION_QUEUE } from './notification.constants';
 
 @Module({
   imports: [
