@@ -2,7 +2,7 @@
 # BUILD FOR LOCAL DEVELOPMENT
 ###################
 
-FROM node:20-alpine AS development
+FROM node:20-slim AS development
 RUN npm install -g pnpm
 
 WORKDIR /usr/src/app
@@ -21,7 +21,7 @@ USER node
 # BUILD FOR PRODUCTION
 ###################
 
-FROM node:20-alpine AS build
+FROM node:20-slim AS build
 RUN npm install -g pnpm
 
 WORKDIR /usr/src/app
@@ -44,7 +44,7 @@ USER node
 # PRODUCTION
 ###################
 
-FROM node:20-alpine AS production
+FROM node:20-slim AS production
 
 ENV NODE_ENV=production
 
