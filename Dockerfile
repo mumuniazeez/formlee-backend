@@ -10,8 +10,9 @@ RUN npm install -g pnpm node-gyp
 
 WORKDIR /usr/src/app
 
-# If this is not a pnpm workspace, drop pnpm-workspace.yaml from this line.
-COPY --chown=node:node package.json pnpm-lock.yaml ./
+# pnpm-workspace.yaml is required here too: it carries onlyBuiltDependencies,
+# which allowlists native install scripts (argon2, @prisma/engines, etc).
+COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 RUN pnpm fetch --prod
 
@@ -32,7 +33,7 @@ RUN npm install -g pnpm node-gyp
 
 WORKDIR /usr/src/app
 
-COPY --chown=node:node package.json pnpm-lock.yaml ./
+COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
 
