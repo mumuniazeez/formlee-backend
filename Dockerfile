@@ -6,7 +6,7 @@ FROM node:20-slim AS development
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 make g++ openssl \
     && rm -rf /var/lib/apt/lists/*
-RUN npm install -g pnpm
+RUN npm install -g pnpm node-gyp
 
 WORKDIR /usr/src/app
 
@@ -28,7 +28,7 @@ FROM node:20-slim AS build
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 make g++ openssl \
     && rm -rf /var/lib/apt/lists/*
-RUN npm install -g pnpm
+RUN npm install -g pnpm node-gyp
 
 WORKDIR /usr/src/app
 
