@@ -73,6 +73,16 @@ model Submission {
   @@map("submissions")
 }
 
+model PasswordResetRequest {
+  id String @id @default(uuid())
+
+  userId String
+
+  token String
+
+  createdAt DateTime @default(now())
+}
+
 enum FormStatus {
   active
   paused

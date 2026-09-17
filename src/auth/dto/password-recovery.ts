@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { IsEmail, IsJWT, IsNotEmpty, IsString } from 'class-validator';
 
 export class ChangePasswordDto {
   @ApiProperty({
@@ -20,9 +20,27 @@ export class ChangePasswordDto {
 }
 
 export class RequestResetPasswordLinkDto {
+  @ApiProperty({
+    description: 'Email of the account',
+    type: 'string',
+  })
   @IsEmail()
   email!: string;
+}
 
-  @IsUrl({ require_tld: false })
-  callbackUrl!: string;
+export class ResetPasswordDto {
+  @ApiProperty({
+    description: 'New password to change to',
+    type: 'string',
+  })
+  @IsString()
+  @IsNotEmpty()
+  newPassword!: string;
+
+  @ApiProperty({
+    description: 'Token sent to the user email',
+    type: 'string',
+  })
+  @IsJWT()
+  token!: string;
 }
