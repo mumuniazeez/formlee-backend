@@ -19,7 +19,7 @@ export class ChangePasswordDto {
   newPassword!: string;
 }
 
-export class RequestResetPassword {
+export class RequestResetPasswordLinkDto {
   @IsEmail()
   email!: string;
 

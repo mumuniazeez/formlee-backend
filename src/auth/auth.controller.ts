@@ -11,6 +11,7 @@ import {
   ChangePasswordDto,
   LoginDto,
   LoginResponseDto,
+  RequestResetPasswordLinkDto,
   SignupDto,
 } from './dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -63,6 +64,9 @@ export class AuthController {
     return this.authService.changePassword(changePasswordDto, userId);
   }
 
+  @Throttle({ default: { ttl: 300000, limit: 3, blockDuration: 900000 } })
   @Post('recover/reset-password-link')
-  requestResetPasswordLink() {}
+  requestResetPasswordLink(
+    @Body() requestResetPasswordLinkDto: RequestResetPasswordLinkDto,
+  ) {}
 }

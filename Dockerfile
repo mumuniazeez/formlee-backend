@@ -3,6 +3,9 @@
 ###################
 
 FROM node:20-slim AS development
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 make g++ openssl \
+    && rm -rf /var/lib/apt/lists/*
 RUN npm install -g pnpm
 
 WORKDIR /usr/src/app
@@ -22,6 +25,9 @@ USER node
 ###################
 
 FROM node:20-slim AS build
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 make g++ openssl \
+    && rm -rf /var/lib/apt/lists/*
 RUN npm install -g pnpm
 
 WORKDIR /usr/src/app
@@ -45,6 +51,10 @@ USER node
 ###################
 
 FROM node:20-slim AS production
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openssl \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV NODE_ENV=production
 
