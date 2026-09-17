@@ -62,4 +62,7 @@ export class AuthController {
   ) {
     return this.authService.changePassword(changePasswordDto, userId);
   }
+
+  @Post('recover/reset-password-link')
+  requestResetPasswordLink() {}
 }

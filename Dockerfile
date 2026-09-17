@@ -1,40 +1,51 @@
-# ---- Base ----
-FROM node:20-alpine AS base
-WORKDIR /app
-RUN apk add --no-cache libc6-compat openssl
-RUN corepack enable && corepack prepare pnpm@9.15.5 --activate
+###################
+# BUILD FOR LOCAL DEVELOPMENT
+###################
 
-# ---- Dependencies ----
-FROM base AS deps
-COPY package.json pnpm-lock.yaml ./
-COPY prisma ./prisma
-RUN pnpm install --frozen-lockfile --config.ignore-scripts=false
+FROM node:26 AS development
+RUN npm install -g pnpm
 
-# ---- Build ----
-FROM base AS build
-COPY package.json pnpm-lock.yaml ./
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-RUN npx prisma generate
-RUN pnpm run build
-RUN pnpm prune --prod
+WORKDIR /usr/src/app
 
-# ---- Production ----
-FROM node:20-alpine AS production
-WORKDIR /app
+COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+RUN pnpm fetch --prod
+
+COPY --chown=node:node . .
+RUN pnpm install
+
+USER node
+
+###################
+# BUILD FOR PRODUCTION
+###################
+
+FROM node:26 AS build
+RUN npm install -g pnpm
+
+WORKDIR /usr/src/app
+
+COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
+
+COPY --chown=node:node . .
+
+RUN pnpm build
+
 ENV NODE_ENV=production
-RUN apk add --no-cache openssl
-RUN corepack enable && corepack prepare pnpm@9.15.5 --activate
 
-RUN addgroup -S nodejs && adduser -S nestjs -G nodejs
+RUN pnpm install --prod
 
-COPY --from=build --chown=nestjs:nodejs /app/node_modules ./node_modules
-COPY --from=build --chown=nestjs:nodejs /app/dist ./dist
-COPY --from=build --chown=nestjs:nodejs /app/prisma ./prisma
-COPY --from=build --chown=nestjs:nodejs /app/package.json ./package.json
+USER node
 
-USER nestjs
+###################
+# PRODUCTION
+###################
 
-EXPOSE 3000
+FROM node:20-alpine AS production
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
+COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+
+CMD [ "node", "dist/main.js" ]
