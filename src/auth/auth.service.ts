@@ -239,7 +239,7 @@ export class AuthService {
       },
     });
 
-    this.prisma.passwordResetRequest.delete({
+    await this.prisma.passwordResetRequest.delete({
       where: { id: passwordResetRequest.id },
     });
 
