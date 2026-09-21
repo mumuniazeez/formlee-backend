@@ -17,7 +17,6 @@ export class PaymentService {
       email: user.email,
       name: `${user.firstName} ${user.lastName}`,
       external_id: user.id,
-      organization_id: this.configService.get('POLAR_ORG_ID'),
       type: 'individual',
     });
 
