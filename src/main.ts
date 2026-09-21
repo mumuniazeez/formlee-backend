@@ -4,13 +4,14 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ErrorMessageResponseDto } from './common/dto';
 import 'dotenv/config';
+import helmet from 'helmet';
 
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
-  app.enableCors({});
+  app.use(helmet());
 
   app.setGlobalPrefix('api');
 
