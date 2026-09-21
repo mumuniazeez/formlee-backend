@@ -9,6 +9,7 @@ export class PaymentService {
   constructor(private readonly configService: ConfigService) {
     this.polarClient = createPolar({
       accessToken: this.configService.get<string>('POLAR_API_KEY')!,
+      environment: 'sandbox',
     });
   }
   async registerCustomerOnPolar(user: User) {
