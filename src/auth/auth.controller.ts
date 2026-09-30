@@ -103,7 +103,7 @@ export class AuthController {
   @ApiResponse({ type: GeneralOkResponseDto, status: 200 })
   @HttpCode(HttpStatus.OK)
   @Throttle({ default: { ttl: 300000, limit: 3, blockDuration: 900000 } })
-  @Post('recover/reset-password-link')
+  @Post('recover/reset-password')
   resetPassword(@Body() resetPasswordLinkDto: ResetPasswordDto) {
     return this.authService.resetPassword(resetPasswordLinkDto);
   }
