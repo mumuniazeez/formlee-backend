@@ -51,12 +51,14 @@ export class SubmissionResponseDto implements Submission {
   @ApiProperty({
     description: 'Name of submitter from form data',
     nullable: true,
+    type: 'string',
   })
   name!: string | null;
 
   @ApiProperty({
     description: 'Message of submitter from form data',
     nullable: true,
+    type: 'string',
   })
   message!: string | null;
   @ApiProperty({
