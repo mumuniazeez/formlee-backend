@@ -19,9 +19,8 @@ export class FormResponseDto implements Form {
   @ApiProperty({
     description: 'Description of the from',
     type: 'string',
-    nullable: true,
   })
-  description!: string | null;
+  description!: string;
 
   @ApiProperty({ description: 'Status of the from', enum: $Enums.FormStatus })
   status!: $Enums.FormStatus;

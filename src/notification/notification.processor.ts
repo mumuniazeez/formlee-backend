@@ -35,6 +35,11 @@ export class NotificationProcessor extends WorkerHost {
         `Skipping notification for form ${form.id}: email notification disabled `,
       );
 
+    await this.prisma.submission.update({
+      where: { id: submissionId },
+      data: { status: 'pending' },
+    });
+
     const filePath = path.join('emails', `submission.hbs`);
 
     await this.mailerService.sendEmail({
@@ -57,14 +62,22 @@ export class NotificationProcessor extends WorkerHost {
   }
 
   @OnWorkerEvent('failed')
-  onFailed(job: Job<NewSubmissionJsonData>, error: Error) {
+  async onFailed(job: Job<NewSubmissionJsonData>, error: Error) {
+    await this.prisma.submission.update({
+      where: { id: job.data.submissionId },
+      data: { status: 'delivery_failed' },
+    });
     this.logger.error(
       `Notification job ${job.id} failed (attempt ${job.attemptsMade}/${job.opts.attempts}: ${error.message})`,
     );
   }
 
   @OnWorkerEvent('completed')
-  onComplete(job: Job<NewSubmissionJsonData>) {
+  async onComplete(job: Job<NewSubmissionJsonData>) {
+    await this.prisma.submission.update({
+      where: { id: job.data.submissionId },
+      data: { status: 'delivered' },
+    });
     this.logger.log(
       `Notification sent for submission ${job.data.submissionId}`,
     );

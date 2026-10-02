@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 import { Form } from '../../../generated/prisma';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -10,11 +10,9 @@ export class CreateFormDto implements Pick<Form, 'name' | 'description'> {
   name!: string;
 
   @ApiProperty({
-    description: 'An optional description for the form',
-    required: false,
+    description: 'Description for the form',
     type: 'string',
   })
   @IsString()
-  @IsOptional()
-  description!: string | null;
+  description!: string;
 }

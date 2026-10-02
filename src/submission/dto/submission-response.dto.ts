@@ -1,5 +1,5 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { Submission } from '../../../generated/prisma';
+import { $Enums, Submission } from '../../../generated/prisma';
 import { type JsonValue } from '../../../generated/prisma/runtime/client';
 import { FormResponseDto } from '../../form/dto';
 
@@ -47,6 +47,24 @@ export class SubmissionResponseDto implements Submission {
     description: 'If submission as been read',
   })
   read!: boolean;
+
+  @ApiProperty({
+    description: 'Name of submitter from form data',
+    nullable: true,
+  })
+  name!: string | null;
+
+  @ApiProperty({
+    description: 'Message of submitter from form data',
+    nullable: true,
+  })
+  message!: string | null;
+  @ApiProperty({
+    enum: $Enums.SubmissionStatus,
+    description: 'Submission Status',
+    default: 'not_delivered',
+  })
+  status!: $Enums.SubmissionStatus;
 
   @ApiProperty({
     description: 'Id of the form this submission is under',

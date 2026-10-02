@@ -36,7 +36,7 @@ model Form {
 
   slug              String     @unique
   name              String
-  description       String?
+  description       String
   status            FormStatus @default(active)
   targetEmail       String
   emailNotification Boolean    @default(true)
@@ -58,10 +58,13 @@ model Submission {
   email     String?
   country   String
   userAgent String
+  name      String?
+  message   String?
   ipAddress String
   referrer  String  @default("N/A")
 
-  read Boolean @default(false)
+  status SubmissionStatus @default(not_delivered)
+  read   Boolean          @default(false)
 
   data Json
 
@@ -87,4 +90,11 @@ enum FormStatus {
   active
   paused
   archived
+}
+
+enum SubmissionStatus {
+  delivered
+  pending
+  not_delivered   @map("not delivered")
+  delivery_failed @map("delivery failed")
 }

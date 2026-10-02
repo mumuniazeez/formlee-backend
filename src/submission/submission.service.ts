@@ -28,6 +28,8 @@ export class SubmissionService {
       throw new NotFoundException('Form not currently active');
 
     const email: string = data.email;
+    const name: string = data.name;
+    const message: string = data.message;
     const ipAddress = req.ip!;
     const userAgent = req.headers['user-agent']!;
 
@@ -41,6 +43,8 @@ export class SubmissionService {
       data: {
         userAgent,
         email,
+        name,
+        message,
         country: `${response.data.city}, ${response.data.region}, ${response.data.country}`,
         data,
         ipAddress,
