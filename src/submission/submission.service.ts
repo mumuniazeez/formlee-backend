@@ -96,7 +96,29 @@ export class SubmissionService {
     return submissions;
   }
 
-  async findAll(
+  async findAll(userId: string): Promise<SubmissionResponseDto[]> {
+    const submissions = await this.prisma.submission.findMany({
+      where: { form: { userId } },
+      include: {
+        form: {
+          select: {
+            name: true,
+            id: true,
+            slug: true,
+            description: true,
+            redirectLink: true,
+          },
+        },
+      },
+    });
+
+    if (submissions.length === 0)
+      throw new NotFoundException('No submissions yet');
+
+    return submissions;
+  }
+
+  async findAllUnderForm(
     formIdOrSlug: string,
     userId: string,
   ): Promise<SubmissionResponseDto[]> {

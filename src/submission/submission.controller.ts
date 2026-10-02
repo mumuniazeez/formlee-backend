@@ -37,17 +37,29 @@ export class SubmissionController {
 
   @ApiOperation({
     summary: 'Find all submissions',
+    description: 'Find all submissions',
+  })
+  @ApiResponse({ type: [SubmissionResponseDto], status: 200 })
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
+  @Get()
+  findAll(@GetUser('id') userId: string) {
+    return this.submissionService.findAll(userId);
+  }
+
+  @ApiOperation({
+    summary: 'Find all submissions under a form',
     description: 'Find all submissions under a form',
   })
   @ApiResponse({ type: [SubmissionResponseDto], status: 200 })
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
   @Get('/f/:formIdOrSlug')
-  findAll(
+  findAllUnderForm(
     @Param('formIdOrSlug') formIdOrSlug: string,
     @GetUser('id') userId: string,
   ) {
-    return this.submissionService.findAll(formIdOrSlug, userId);
+    return this.submissionService.findAllUnderForm(formIdOrSlug, userId);
   }
 
   @ApiOperation({
