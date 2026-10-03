@@ -88,10 +88,10 @@ export class SubmissionController {
   }
 
   @ApiOperation({
-    summary: 'Find a submission',
-    description: 'Find a submission by id',
+    summary: 'Mark a submission as read',
+    description: 'Mark a submission as read',
   })
-  @ApiResponse({ type: [SubmissionResponseDto], status: 200 })
+  @ApiResponse({ type: SubmissionResponseDto, status: 200 })
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
   @Patch(':id/read')
