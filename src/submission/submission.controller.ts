@@ -20,6 +20,7 @@ import {
 } from '@nestjs/swagger';
 import { GetUser } from '../auth/decorators/get-user.decorators';
 import { type Request } from 'express';
+import { GeneralOkResponseDto } from '../common/dto';
 
 @Controller('submission')
 export class SubmissionController {
@@ -102,7 +103,7 @@ export class SubmissionController {
     summary: 'Delete a submission',
     description: 'Delete a submission by id',
   })
-  @ApiResponse({ type: [SubmissionResponseDto], status: 200 })
+  @ApiResponse({ type: GeneralOkResponseDto, status: 200 })
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
   @Delete(':id')
