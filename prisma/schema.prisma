@@ -23,6 +23,8 @@ model User {
 
   passwordHash String
 
+  role UserRole @default(user)
+
   forms Form[]
 
   createdAt DateTime @default(now())
@@ -86,6 +88,12 @@ model PasswordResetRequest {
   createdAt DateTime @default(now())
 }
 
+enum UserRole {
+  user
+  admin
+  super_admin @map("super-admin")
+}
+
 enum FormStatus {
   active
   paused
@@ -95,6 +103,6 @@ enum FormStatus {
 enum SubmissionStatus {
   delivered
   pending
-  not_delivered   @map("not delivered")
-  delivery_failed @map("delivery failed")
+  not_delivered   @map("not-delivered")
+  delivery_failed @map("delivery-failed")
 }

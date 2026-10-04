@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '../../../generated/prisma';
+import { $Enums, User } from '../../../generated/prisma';
 
 export class UserResponseDto implements Omit<User, 'passwordHash'> {
   @ApiProperty({ description: 'The id of the user' })
@@ -12,6 +12,12 @@ export class UserResponseDto implements Omit<User, 'passwordHash'> {
   lastName!: string;
   @ApiProperty({ description: 'The email address of the user' })
   email!: string;
+  @ApiProperty({
+    description: 'The email address of the user',
+    enum: $Enums.UserRole,
+    default: 'user',
+  })
+  role!: $Enums.UserRole;
   @ApiProperty({
     description: 'The creation date of the user account',
   })
